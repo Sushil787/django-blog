@@ -1,0 +1,6 @@
+{
+  "workbench.settings.editor": "json",
+  "emmet.includeLanguages": {
+    "django-html": "html",
+}
+}
