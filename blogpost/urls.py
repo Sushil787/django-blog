@@ -6,13 +6,11 @@ from . import views
 
 urlpatterns = [
         path('', views.index, name='index'),
-        path('blog/', views.show_blogs),
-        path('blog/', views.create_blog),
+        path('blog/add', views.create_blog, name='addblog'),
+        path('blog/update/<int:id>', views.update_blog, name='update'),
         path('auth/', views.auth, name='auth'),
         path('login/', views.signin, name='signin'),
         path('logout/', views.signout, name='logout'),
-
         path('auth/signup', views.register, name='register'),
-        path('blog/<int:id>', views.delete_blog),
-        path('blog/<int:id>', views.update_blog)
+        path('blog/delete/<int:id>', views.delete_blog, name="delete"),
 ]

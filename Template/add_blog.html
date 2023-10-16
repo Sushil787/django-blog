@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="POST" action={% url "addblog" %}>
+    <div style="margin:4rem">
+        <div class="form-group " >
+            <label for="exampleFormControlInput1">Blog Title</label>
+            <input type="text" required class="form-control" id="exampleFormControlInput1" placeholder="blog title" name="title">
+          </div>
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Write blog here</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name="body"></textarea>
+          </div>
+          <div class="text-center"> <!-- Center the button -->
+            <button type="submit" class="btn btn-primary btn">Submit</button>
+        </div></div>
+  </form>
+{% endblock content %}

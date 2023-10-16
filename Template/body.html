@@ -1,10 +1,39 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
+{% block title %} Home {% endblock title %}
 
-
-{% block title %}
-Home
-{% endblock title %}
 {% block content %}
-<h1>hello</h1>
-{% endblock  %}
+  {% if user.is_authenticated %}
+    <div class="row d-flex justify-content-center px-3 py-4">
+      {% for blog in data %}
+        <div class="col-sm-6 pl-8">
+          <div class="card px-3"> <!-- Added px-3 for left and right padding -->
+            <div class="card-body">
+             <form action="{% url "update" blog.id %}" method="post">
+              <h5 class="card-title">{{blog.title}}</h5>
+              <p class="card-text">
+                {{blog.body}}
+              </p>
+              <p class="card-text">
+                {{blog.post_date}}
+              </p>
+              <a href={% url "update" blog.id %} class="btn btn-primary">Edit</a>
+              <a href={% url "delete" blog.id %} class="btn btn-primary">Delete</a>
+
+            </div>
+             </form>
+          </div>
+        </div>
+      {% endfor %}
+      
+    </div>
+  {% else %}
+    <!--Grid row-->
+    <div style="margin-left:40%">
+      <!--Grid column-->
+<h1>Login </h1>      
+      <!--Grid column-->
+    </div>
+    <!--Grid row-->
+  {% endif %}
+{% endblock %}

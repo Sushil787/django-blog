@@ -1,8 +1,10 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import  get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login , logout
 from django.contrib.auth.models import User
+from blogpost import models
 from django.contrib import messages
-
+from django.contrib.auth.decorators import login_required
+import datetime
 
 
 def auth(request):
@@ -49,14 +51,48 @@ def register(request):
 def signout(request):
     logout(request)
     return redirect('index')
-def delete_blog(request):
+def delete_blog(request, id):
+    blog = get_object_or_404(models.Blog, id=id)  # Get the blog entry or raise a 404 error if not found
+    blog.delete()  # Delete the blog entry
+    messages.success(request, "Blog Deleted Successfully")
+    return redirect('index')
+
+    
     pass
 def create_blog(request):
-    pass
-def update_blog(request):
-    pass
+    if(request.method == "POST"):
+        title = request.POST["title"]
+        body = request.POST["body"]
+        if(title == "" or body == ""):
+            messages.error(request,"no title or body provider" )
+        else:
+            new_blog = models.Blog.objects.create(author=request.user, title = title, body= body)
+            messages.success(request,"Blog Created Successfully" )
+            return redirect('index')
+
+    return render(request,'add_blog.html')
+
+@login_required
+def update_blog(request, id):
+   blog = models.Blog.objects.get(id=id)
+   if(request.method == "POST"):
+       new_title = request.POST["title"]
+       new_body = request.POST["body"]
+       blog.title = new_title
+       blog.body = new_body
+       blog.post_date = datetime.datetime.strftime(datetime.date.today(),'%Y-%m-%d')
+       blog.save()
+       messages.success(request,"Blog Updated Successfully" )
+
+       return redirect('index')
+   return render(request, 'update_blog.html', {"blog":blog})
+    
+
 def show_blogs(request):
-    return render
+    return render(request, 'body.html')
 
 def index(request):
+    if(request.user.is_authenticated):
+        data = models.Blog.objects.filter(author = request.user).all()
+        return render(request,'body.html', {"data":data})
     return render(request,'body.html')
